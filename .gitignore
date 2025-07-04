@@ -1,0 +1,33 @@
+﻿# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env/
+
+# Data files
+*.csv
+*.pickle
+*.pkl
+*.parquet
+*.hdf5
+
+# Models & Weights
+*.bin
+*.pt
+*.h5
+*.joblib
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+Create_data.ipynb
+Word_Files/
+venv_nlp311/
+models/xlm_roberta_intent/

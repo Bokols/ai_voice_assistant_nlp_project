@@ -1,0 +1,161 @@
+{
+  "classifiers": {
+    "danish-bert-botxo": {
+      "model": "Maltehb/danish-bert-botxo",
+      "accuracy": 0.9990867579908675,
+      "f1": 0.9990868390018627,
+      "training_time": 381.2239375114441,
+      "class_report": {
+        "alarm": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 208.0
+        },
+        "nyheder": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 209.0
+        },
+        "out_of_scope": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 53.0
+        },
+        "p\u00e5mindelse": {
+          "precision": 1.0,
+          "recall": 0.995475113122172,
+          "f1-score": 0.9977324263038548,
+          "support": 221.0
+        },
+        "sp\u00f8rgsm\u00e5l": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        },
+        "vejrudsigten": {
+          "precision": 0.9951219512195122,
+          "recall": 1.0,
+          "f1-score": 0.9975550122249389,
+          "support": 204.0
+        },
+        "accuracy": 0.9990867579908675,
+        "macro avg": {
+          "precision": 0.9991869918699187,
+          "recall": 0.9992458521870287,
+          "f1-score": 0.9992145730881323,
+          "support": 1095.0
+        },
+        "weighted avg": {
+          "precision": 0.9990912128299365,
+          "recall": 0.9990867579908675,
+          "f1-score": 0.9990868390018627,
+          "support": 1095.0
+        }
+      },
+      "precision": 0.9990912128299365,
+      "recall": 0.9990867579908675
+    },
+    "xlm-roberta-base": {
+      "model": "xlm-roberta-base",
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "training_time": 480.15637588500977,
+      "class_report": {
+        "alarm": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 208.0
+        },
+        "nyheder": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 209.0
+        },
+        "out_of_scope": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 53.0
+        },
+        "p\u00e5mindelse": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 221.0
+        },
+        "sp\u00f8rgsm\u00e5l": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 200.0
+        },
+        "vejrudsigten": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 204.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 1095.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 1095.0
+        }
+      },
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  },
+  "sentence_similarity": {
+    "model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "mean_similarity": 0.9553930759429932,
+    "median_similarity": 0.9788291454315186,
+    "std_similarity": 0.06771906465291977,
+    "embedding_time": 10.106056928634644,
+    "intent_similarities": {
+      "alarm": {
+        "mean": 0.9827252626419067,
+        "median": 0.9999998807907104,
+        "count": 179
+      },
+      "nyheder": {
+        "mean": 0.9203457832336426,
+        "median": 0.9424405097961426,
+        "count": 164
+      },
+      "out_of_scope": {
+        "mean": 0.932329535484314,
+        "median": 0.9576547145843506,
+        "count": 129
+      },
+      "p\u00e5mindelse": {
+        "mean": 0.9896754622459412,
+        "median": 0.9999998807907104,
+        "count": 176
+      },
+      "sp\u00f8rgsm\u00e5l": {
+        "mean": 0.9379366636276245,
+        "median": 0.9584595561027527,
+        "count": 172
+      },
+      "vejrudsigten": {
+        "mean": 0.9598336219787598,
+        "median": 0.9726511240005493,
+        "count": 180
+      }
+    }
+  }
+}

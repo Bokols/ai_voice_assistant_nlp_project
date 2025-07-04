@@ -1,0 +1,26 @@
+{
+  "key_findings": {
+    "most_confused_intents": [
+      "nyheder\u2192sp\u00f8rgsm\u00e5l",
+      "sp\u00f8rgsm\u00e5l\u2192nyheder",
+      "out_of_scope\u2192sp\u00f8rgsm\u00e5l"
+    ],
+    "low_similarity_intents": [
+      "nyheder",
+      "out_of_scope",
+      "sp\u00f8rgsm\u00e5l"
+    ],
+    "rule_based_corrections": [
+      "Enhanced news keywords",
+      "Question words",
+      "Courtesy phrases"
+    ]
+  },
+  "action_steps": [
+    "1. Add 500 augmented samples for nyheder, out_of_scope, and sp\u00f8rgsm\u00e5l intents",
+    "2. Fine-tune Danish BERT for 1 additional epoch on expanded dataset",
+    "3. Implement rule-based correction layer in production pipeline",
+    "4. Create adversarial test set focusing on low-similarity intents",
+    "5. Monitor production performance weekly for these intents"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "timestamp": "2025-07-04 14:59:04",
+  "inference_time": 35.42571139335632,
+  "samples_processed": 1095,
+  "avg_confidence": 0.9995941765776508,
+  "low_confidence_samples": 0,
+  "critical_issues": [
+    "nyheder/sp\u00f8rgsm\u00e5l confusion",
+    "out_of_scope misclassification"
+  ]
+}

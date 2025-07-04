@@ -1,0 +1,39 @@
+{
+  "model": "paraphrase-multilingual-MiniLM-L12-v2",
+  "mean_similarity": 0.9553930759429932,
+  "median_similarity": 0.9788291454315186,
+  "std_similarity": 0.06771906465291977,
+  "embedding_time": 10.106056928634644,
+  "intent_similarities": {
+    "alarm": {
+      "mean": 0.9827252626419067,
+      "median": 0.9999998807907104,
+      "count": 179
+    },
+    "nyheder": {
+      "mean": 0.9203457832336426,
+      "median": 0.9424405097961426,
+      "count": 164
+    },
+    "out_of_scope": {
+      "mean": 0.932329535484314,
+      "median": 0.9576547145843506,
+      "count": 129
+    },
+    "p\u00e5mindelse": {
+      "mean": 0.9896754622459412,
+      "median": 0.9999998807907104,
+      "count": 176
+    },
+    "sp\u00f8rgsm\u00e5l": {
+      "mean": 0.9379366636276245,
+      "median": 0.9584595561027527,
+      "count": 172
+    },
+    "vejrudsigten": {
+      "mean": 0.9598336219787598,
+      "median": 0.9726511240005493,
+      "count": 180
+    }
+  }
+}
