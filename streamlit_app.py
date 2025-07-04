@@ -1,13 +1,22 @@
 import streamlit as st
 import pandas as pd
 import json
-import matplotlib.pyplot as plt
-from transformers import pipeline, AutoConfig, AutoTokenizer, AutoModelForSequenceClassification
-import seaborn as sns
 import re
 import os
 import torch
 from pathlib import Path
+from transformers import pipeline as transformers_pipeline
+from transformers import AutoConfig, AutoTokenizer, AutoModelForSequenceClassification
+from typing import Dict, Any, Tuple, List, Optional, Union
+
+# Try to import matplotlib with graceful fallback
+try:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    plotting_available = True
+except ImportError:
+    plotting_available = False
+    st.warning("Plotting libraries not available - some visualizations will be disabled")
 
 # =============================================================================
 # APP CONFIGURATION
@@ -115,7 +124,7 @@ st.markdown("""
 # DATA LOADING
 # =============================================================================
 @st.cache_data
-def load_data():
+def load_data() -> Tuple[pd.DataFrame, Dict[str, Any], Dict[str, Any], Dict[str, Any], Dict[str, str]]:
     try:
         # Use Path for cross-platform compatibility
         data_path = Path("data") / "da_voice_assistant_enriched.csv"
@@ -143,12 +152,18 @@ def load_data():
     except Exception as e:
         st.error(f"Failed to load label encoder: {str(e)}")
     
-    return df, json_files.get('improvement_plan', {}), json_files.get('baseline_results', {}), json_files.get('sentence_similarity_results', {}), label_encoder
+    return (
+        df, 
+        json_files.get('improvement_plan', {}), 
+        json_files.get('baseline_results', {}), 
+        json_files.get('sentence_similarity_results', {}), 
+        label_encoder
+    )
 
 # =============================================================================
 # INTENT MAPPING
 # =============================================================================
-def get_intent_mapping():
+def get_intent_mapping() -> Dict[str, Dict[str, str]]:
     """Map encoded labels to Danish and English intent names"""
     return {
         "LABEL_0": {"danish": "alarm", "english": "set alarm"},
@@ -163,7 +178,7 @@ def get_intent_mapping():
 # MODEL LOADING
 # =============================================================================
 @st.cache_resource
-def load_model():
+def load_model() -> Optional[transformers_pipeline]:
     try:
         model_dir = Path("models") / "danish_bert_intent"
         
@@ -192,7 +207,7 @@ def load_model():
         quantized_model.eval()
         
         # Create pipeline
-        return pipeline(
+        return transformers_pipeline(
             "text-classification",
             model=quantized_model,
             tokenizer=tokenizer,
@@ -205,7 +220,7 @@ def load_model():
 # =============================================================================
 # RECOMMENDATION ENGINE
 # =============================================================================
-def get_recommendations(intent):
+def get_recommendations(intent: str) -> List[str]:
     """Generate recommendations based on predicted intent"""
     recommendations = {
         "nyheder": [
@@ -244,7 +259,7 @@ def get_recommendations(intent):
 # =============================================================================
 # RULE-BASED CORRECTION
 # =============================================================================
-def apply_rule_based_corrections(text, current_prediction):
+def apply_rule_based_corrections(text: str, current_prediction: str) -> Tuple[str, List[str]]:
     """Apply rule-based corrections to model predictions"""
     correction_rules = [
         {
@@ -275,7 +290,7 @@ def apply_rule_based_corrections(text, current_prediction):
 # =============================================================================
 # APP SECTIONS
 # =============================================================================
-def project_overview():
+def project_overview() -> None:
     st.markdown('<div class="section-title">🗣️ Danish Voice Assistant NLP Project</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns([3, 2])
@@ -309,34 +324,41 @@ def project_overview():
     with col2:
         # Use placeholder if image not available
         image_path = Path("results") / "simulated_confusion_matrix.png"
-        if image_path.exists():
+        if image_path.exists() and plotting_available:
             st.image(str(image_path), caption="Simulated Confusion Matrix")
+        elif image_path.exists():
+            st.warning("Plotting not available - unable to show image")
         else:
             st.warning(f"Confusion matrix image not found: {image_path}")
         
         # Use placeholder if image not available
         image_path = Path("results") / "intent_mean_similarity.png"
-        if image_path.exists():
+        if image_path.exists() and plotting_available:
             st.image(str(image_path), caption="Intent Similarity Analysis")
+        elif image_path.exists():
+            st.warning("Plotting not available - unable to show image")
         else:
             st.warning(f"Similarity analysis image not found: {image_path}")
 
-def data_exploration(df):
+def data_exploration(df: pd.DataFrame) -> None:
     st.markdown('<div class="section-title">🔍 Data Exploration</div>', unsafe_allow_html=True)
     
     if df.empty:
         st.error("No data available for exploration")
         return
     
-    # Intent distribution
-    st.subheader("Intent Distribution")
-    intent_counts = df['intent'].value_counts().reset_index()
-    intent_counts.columns = ['Intent', 'Count']
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.barplot(data=intent_counts, x='Intent', y='Count', palette='viridis')
-    plt.title('Intent Distribution')
-    plt.xticks(rotation=45)
-    st.pyplot(fig)
+    # Intent distribution - only if plotting is available
+    if plotting_available:
+        st.subheader("Intent Distribution")
+        intent_counts = df['intent'].value_counts().reset_index()
+        intent_counts.columns = ['Intent', 'Count']
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.barplot(data=intent_counts, x='Intent', y='Count', palette='viridis')
+        plt.title('Intent Distribution')
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
+    else:
+        st.warning("Plotting libraries not available - skipping visualizations")
     
     # Satisfaction metrics
     st.subheader("User Satisfaction Metrics")
@@ -344,20 +366,20 @@ def data_exploration(df):
     
     with col1:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("Average Rating", f"{df['user_rating'].mean():.2f}/5.0")
+        st.metric("Average Rating", f"{df['user_rating'].mean():.2f}/5.0" if not df.empty else "N/A")
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("Helpfulness Rate", f"{df['was_helpful'].mean()*100:.1f}%")
+        st.metric("Helpfulness Rate", f"{df['was_helpful'].mean()*100:.1f}%" if not df.empty else "N/A")
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col3:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric("Satisfaction Score", f"{df['user_satisfaction'].mean():.2f}/10.0")
+        st.metric("Satisfaction Score", f"{df['user_satisfaction'].mean():.2f}/10.0" if not df.empty else "N/A")
         st.markdown('</div>', unsafe_allow_html=True)
 
-def model_performance(baseline_results, similarity_results):
+def model_performance(baseline_results: Dict[str, Any], similarity_results: Dict[str, Any]) -> None:
     st.markdown('<div class="section-title">🤖 Model Performance</div>', unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
@@ -387,15 +409,19 @@ def model_performance(baseline_results, similarity_results):
         
         # Use placeholder if image not available
         image_path = Path("results") / "intent_classification_comparison.png"
-        if image_path.exists():
+        if image_path.exists() and plotting_available:
             st.image(str(image_path), caption="Model Comparison")
+        elif image_path.exists():
+            st.warning("Plotting not available - unable to show image")
         else:
             st.warning(f"Model comparison image not found: {image_path}")
         
         # Use placeholder if image not available
         image_path = Path("results") / "sentence_similarity_distribution.png"
-        if image_path.exists():
+        if image_path.exists() and plotting_available:
             st.image(str(image_path), caption="Sentence Similarity Distribution")
+        elif image_path.exists():
+            st.warning("Plotting not available - unable to show image")
         else:
             st.warning(f"Similarity distribution image not found: {image_path}")
         
@@ -406,7 +432,11 @@ def model_performance(baseline_results, similarity_results):
         - Low similarity scores for nyheder paraphrases
         """)
 
-def interactive_demo(classifier, improvement_plan, label_encoder):
+def interactive_demo(
+    classifier: Optional[transformers_pipeline], 
+    improvement_plan: Dict[str, Any], 
+    label_encoder: Dict[str, str]
+) -> None:
     st.markdown('<div class="section-title">🎮 Interactive Demo</div>', unsafe_allow_html=True)
     
     if classifier is None:
@@ -517,7 +547,7 @@ def interactive_demo(classifier, improvement_plan, label_encoder):
         }
         st.dataframe(pd.DataFrame(mapping_data), hide_index=True)
 
-def improvement_roadmap(improvement_plan, similarity_results):
+def improvement_roadmap(improvement_plan: Dict[str, Any], similarity_results: Dict[str, Any]) -> None:
     st.markdown('<div class="section-title">🚀 Improvement Roadmap</div>', unsafe_allow_html=True)
     
     if not improvement_plan:
@@ -582,7 +612,7 @@ def improvement_roadmap(improvement_plan, similarity_results):
 # =============================================================================
 # MAIN APP
 # =============================================================================
-def main():
+def main() -> None:
     # Check required directories
     required_dirs = ["models", "results", "data"]
     missing_dirs = [d for d in required_dirs if not Path(d).exists()]
