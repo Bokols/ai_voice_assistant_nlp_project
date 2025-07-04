@@ -1,5 +1,8 @@
 # 🗣️ Improving AI Voice Assistants: A Danish NLP Evaluation and Enhancement Framework
 
+**Explore the app components:**
+- **Test the model [here](https://aivoiceassistantnlpproject-n8y3qjeecqh8z6wpcckvqb.streamlit.app/):**
+
 ## 🔍 Overview
 
 This project presents a comprehensive framework to evaluate, improve, and visualize the performance of AI voice assistants in Danish. It combines synthetic data simulation, advanced NLP preprocessing, fine-tuned transformer models, and interactive visualizations. Designed for underrepresented languages, the pipeline identifies critical linguistic and contextual errors and enhances the performance and interpretability of intent recognition models.
